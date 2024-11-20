@@ -1,11 +1,10 @@
-import { Avatar, Dropdown, Navbar } from 'flowbite-react';
-import { useEffect, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import { Navbar } from 'flowbite-react';
 import logo from '../assets/img/logo_hcmut.png';
 import './NavBar.css';
 
 export default function NavBar() {
-    // const location = useLocation();
+    const location = useLocation(); // Khai báo useLocation để lấy đường dẫn hiện tại
 
     return (
         <Navbar fluid rounded>
@@ -21,58 +20,46 @@ export default function NavBar() {
             </Navbar.Brand>
 
             <Navbar.Collapse>
-                {(() => {
-                    if (location.pathname === '/') {
-                        return (
-                            <Navbar.Link href="/" active>
-                                Home
-                            </Navbar.Link>
-                        );
-                    } else {
-                        return <Navbar.Link href="/">Home</Navbar.Link>;
-                    }
-                })()}
-                {(() => {
-                    if (location.pathname === '/add-movies') {
-                        return (
-                            <Navbar.Link href="/add-movies" active>
-                                Add movies
-                            </Navbar.Link>
-                        );
-                    } else {
-                        return (
-                            <Navbar.Link href="/add-movies">
-                                Add movies
-                            </Navbar.Link>
-                        );
-                    }
-                })()}
-                {(() => {
-                    if (location.pathname === '/see-award-rate') {
-                        return (
-                            <Navbar.Link href="/see-award-rate" active>
-                                See award rate
-                            </Navbar.Link>
-                        );
-                    } else {
-                        return (
-                            <Navbar.Link href="/see-award-rate">
-                                See award rate
-                            </Navbar.Link>
-                        );
-                    }
-                })()}
-                {(() => {
-                    if (location.pathname === '/about') {
-                        return (
-                            <Navbar.Link href="/about" active>
-                                About
-                            </Navbar.Link>
-                        );
-                    } else {
-                        return <Navbar.Link href="/about">About</Navbar.Link>;
-                    }
-                })()}
+                <Link
+                    to="/"
+                    className={`${
+                        location.pathname === '/'
+                            ? 'block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500'
+                            : 'block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700'
+                    }`}
+                >
+                    Home
+                </Link>
+                <Link
+                    to="/add-movies"
+                    className={`${
+                        location.pathname === '/add-movies'
+                            ? 'block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500'
+                            : 'block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700'
+                    }`}
+                >
+                    Add movies
+                </Link>
+                <Link
+                    to="/see-award-rate"
+                    className={`${
+                        location.pathname === '/see-award-rate'
+                            ? 'block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500'
+                            : 'block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700'
+                    }`}
+                >
+                    See award rate
+                </Link>
+                <Link
+                    to="/about"
+                    className={`${
+                        location.pathname === '/about'
+                            ? 'block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500'
+                            : 'block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700'
+                    }`}
+                >
+                    About
+                </Link>
             </Navbar.Collapse>
         </Navbar>
     );

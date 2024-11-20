@@ -12,8 +12,8 @@ function App() {
     const [count, setCount] = useState(0);
 
     return (
-        <DefaultLayout>
-            <BrowserRouter>
+        <BrowserRouter>
+            <DefaultLayout>
                 <Routes>
                     <Route exact path="/" element={<HomePage />}></Route>
                     <Route exact path="homepage" element={<HomePage />}></Route>
@@ -34,8 +34,8 @@ function App() {
                     ></Route>
                     <Route exact path="about" element={<About />}></Route>
                 </Routes>
-            </BrowserRouter>
-        </DefaultLayout>
+            </DefaultLayout>
+        </BrowserRouter>
     );
 }
 
