@@ -1,7 +1,5 @@
-import NavBar from "../layout/NavBar"
+import NavBar from '../layout/NavBar';
 
-export default function FilterRate () {
-    return (
-        <NavBar/>
-    )
+export default function FilterRate() {
+    return <></>;
 }
