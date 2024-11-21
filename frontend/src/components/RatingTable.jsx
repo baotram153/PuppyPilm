@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Checkbox, Table, Button} from "flowbite-react";
 import { Label, Modal, TextInput } from "flowbite-react";
-import { TbSortAscending,  TbSortDescending} from "react-icons/tb";
+import { TbSortAscending,  TbSortDescending, TbSortDescendingLetters, TbSortAscendingLetters } from "react-icons/tb";
 import EditForm from "./EditForm";
 
 export default function RatingTable() {
@@ -105,9 +105,17 @@ export default function RatingTable() {
         const item = sortConfig.find((item) => item.key === key);
         if(item.key === key) {
             if(item.isAscending) {
-                return <TbSortAscending />;
+                if(key === "title") {
+                    return <TbSortAscendingLetters />;
+                } else {
+                    return <TbSortAscending />;
+                }
             } else {
-                return <TbSortDescending />;
+                if(key === "title") {
+                    return <TbSortDescendingLetters />;
+                } else {
+                    return <TbSortDescending />;
+                }
             }
         }
         return null;
