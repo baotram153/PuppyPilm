@@ -1,54 +1,54 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Checkbox, Table, Button} from "flowbite-react";
 import { Label, Modal, TextInput } from "flowbite-react";
 import { TbSortAscending,  TbSortDescending, TbSortDescendingLetters, TbSortAscendingLetters } from "react-icons/tb";
 import EditForm from "./EditForm";
 
 export default function RatingTable() {
-    const [data, setData] = useState(
-        [
-            {
-                id: 1,
-                title: "Breaking Bad - Season 1",
-                NoN: 4, // Number of Nomination
-                NoA: 2, // Number of Award
-                rate: 50
-            },
-            {
-                id: 2,
-                title: "Schindler's List",
-                NoN: 6,
-                NoA: 2, 
-                rate: 33.3
-            },
-            {
-                id: 3,
-                title: "Singin' in the Rain",
-                NoN: 12,
-                NoA: 3, 
-                rate: 25
-            },
-            {
-                id: 4,
-                title: "Breaking Bad - Season 2",
-                NoN: 10,
-                NoA: 2, 
-                rate: 20
+    const [data, setData] = useState([]);
+    const [filteredData, setfilteredData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        fetch(`https://puppypilm.tatrungtin.id.vn/api/movies/awards`) // Replace with your API URL
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
             }
-        ]
-    )
+            return response.json();
+          })
+          .then((jsonData) => {
+            if (jsonData.success && Array.isArray(jsonData.data )) {
+                console.log("Fetched Data:", jsonData);
+                setData(jsonData.data); // Update data if the response is successful
+                setfilteredData(jsonData.data);
+                setLoading(false);
+              } else {
+                throw new Error(jsonData.message || "API Error");
+              }
+          })
+          .catch((error) => {
+            setError(error.message);
+            setLoading(false);
+          });
+      }, []);
+
+    /* if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>; */
+    console.log("fetched data: ", data);
+
     const [searchTitle, setSearchTitle] = useState('');
     const [searchNoN, setSearchNoN] = useState('');
     const [searchNoA, setSearchNoA] = useState('');
     const [searchRate, setSearchRate] = useState('');
-    const [filteredData, setfilteredData] = useState(data);
     const [sortConfig, setSortConfig] = useState(
         [
-            { key: "id", isAscending: true },
+            { key: "movie_id", isAscending: true },
             { key: "title", isAscending: true },
-            { key: "NoN", isAscending: true },
-            { key: "NoA", isAscending: true },
-            { key: "rate", isAscending: true }
+            { key: "number_of_nominations", isAscending: true },
+            { key: "number_of_awards", isAscending: true },
+            { key: "winning_ratio", isAscending: true }
         ]
     );
 
@@ -57,11 +57,11 @@ export default function RatingTable() {
             const checkTitle = row.title.toLowerCase()
             .includes(searchTitle.toLowerCase()) || searchTitle === '';
             
-            const checkNoN = row.NoN > Number(searchNoN) || searchNoN === '';
+            const checkNoN = row.number_of_nominations > Number(searchNoN) || searchNoN === '';
 
-            const checkNoA = row.NoA > Number(searchNoA) || searchNoA === '';
+            const checkNoA = row.number_of_awards > Number(searchNoA) || searchNoA === '';
 
-            const checkRate = row.rate > Number(searchRate) || searchRate === '';
+            const checkRate = row.winning_ratio > Number(searchRate) || searchRate === '';
             
             return checkTitle && checkNoN && checkNoA && checkRate;
         });
@@ -181,9 +181,9 @@ export default function RatingTable() {
                 <Table hoverable>
                     <Table.Head>
                         <Table.HeadCell 
-                        onClick={() => handleSort("id")}>
+                        onClick={() => handleSort("movie_id")}>
                             Movie ID 
-                            {getSortIndicator("id")}
+                            {getSortIndicator("movie_id")}
                         </Table.HeadCell>
                         <Table.HeadCell
                         onClick={() => handleSort("title")}>
@@ -191,32 +191,35 @@ export default function RatingTable() {
                             {getSortIndicator("title")}
                         </Table.HeadCell>
                         <Table.HeadCell 
-                        onClick={() => handleSort("NoN")}>
+                        onClick={() => handleSort("number_of_nominations")}>
                             Number of nominations
-                            {getSortIndicator("NoN")}
+                            {getSortIndicator("number_of_nominations")}
                         </Table.HeadCell>
                         <Table.HeadCell 
-                        onClick={() => handleSort("NoA")}>
+                        onClick={() => handleSort("number_of_awards")}>
                             Number of awards
-                            {getSortIndicator("NoA")}
+                            {getSortIndicator("number_of_awards")}
                         </Table.HeadCell>
                         <Table.HeadCell 
-                        onClick={() => handleSort("rate")}>
+                        onClick={() => handleSort("winning_ratio")}>
                             Winning Ratio (%)
-                            {getSortIndicator("rate")}
+                            {getSortIndicator("winning_ratio")}
                         </Table.HeadCell>
                     </Table.Head>
-
+                    <div>
+                        {loading && <p>Loading...</p>}
+                        {error && <p>Error: {error}</p>}
+                    </div>
                     <Table.Body className="divide-y">
                         {filteredData.map((row) => (
-                            <Table.Row key={row.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                            <Table.Row key={row.movie_id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                    {row.id}
+                                    {row.movie_id}
                                 </Table.Cell>
                                 <Table.Cell>{row.title}</Table.Cell>
-                                <Table.Cell>{row.NoN}</Table.Cell>
-                                <Table.Cell>{row.NoA}</Table.Cell>
-                                <Table.Cell>{row.rate}</Table.Cell>
+                                <Table.Cell>{row.number_of_nominations}</Table.Cell>
+                                <Table.Cell>{row.number_of_awards}</Table.Cell>
+                                <Table.Cell>{row.winning_ratio}</Table.Cell>
                             </Table.Row>
                         ))}
                     </Table.Body>

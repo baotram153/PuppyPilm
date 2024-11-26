@@ -1,7 +1,8 @@
 --------------------------------- Nomination vs Win Rate for Movies ----------------------------- 
 -- Function definition:
-CREATE OR REPLACE FUNCTION get_award_win_ratio()
-RETURNS TABLE(Movie_ID INT, Title TEXT, Number_of_nominations INT, Number_of_awards INT, Winning_Ratio FLOAT) AS $$
+-- Nomination vs Win Rate for Movies:
+CREATE OR REPLACE FUNCTION get_award_win_ratio(given_ratio FLOAT)
+RETURNS TABLE(Movie_ID INT, Title TEXT, Number_of_nominations INT, Number_of_awards INT, Winning_Ratio FLOAT, Is_larger TEXT) AS $$
 DECLARE movie_record RECORD;
 BEGIN
     FOR movie_record IN
@@ -27,11 +28,17 @@ BEGIN
       ELSE 
         Winning_Ratio := (movie_record.Number_of_awards::FLOAT / movie_record.Number_of_nominations) * 100;
       END IF;
+      Is_larger := CASE
+          WHEN Winning_Ratio >= given_ratio THEN 'TRUE'
+          ELSE 'FALSE'
+        END;
       
       RETURN NEXT;
     END LOOP;
 
 END;
 $$ LANGUAGE plpgsql;
+
 -- Call Function:
+SELECT * FROM get_award_win_ratio(70);
 SELECT * FROM get_award_win_ratio();
