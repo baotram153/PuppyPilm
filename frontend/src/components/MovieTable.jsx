@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Checkbox, Table, Button} from "flowbite-react";
 import { Label, Modal, TextInput } from "flowbite-react";
 import EditForm from "./EditForm";
+import AddForm from "./AddForm";
 
 export default function MovieTable() {
     const [data, setData] = useState(
@@ -49,7 +50,8 @@ export default function MovieTable() {
         ]);
     
     const [checkedRows, setCheckedRows] = useState(new Set());
-    const [openModal, setOpenModal] = useState(false);
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [openAddModal, setOpenAddModal] = useState(false);
     const [editMovieInfo, setEditMovieInfo] = useState({});
 
     const toggleRow = (id) => {
@@ -73,9 +75,17 @@ export default function MovieTable() {
         setCheckedRows(new Set());
     };
 
+    const handleAdd = () => {
+        setOpenAddModal(true);
+    };
+
+
 
     return (
         <div className="overflow-x-auto">
+            <Button className="m-4" onClick={handleAdd}>
+                Add Movie
+            </Button>
             <Table hoverable>
                 <Table.Head>
                     <Table.HeadCell className="p-4">
@@ -126,7 +136,7 @@ export default function MovieTable() {
                             <Table.Cell>{row.studio_id}</Table.Cell>
                             <Table.Cell>
                                 <a onClick={() => {
-                                    setOpenModal(true);
+                                    setOpenEditModal(true);
                                     setEditMovieInfo(row);}
                                 } 
                                 href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
@@ -143,7 +153,8 @@ export default function MovieTable() {
                 disabled={checkedRows.size === 0}>Delete
             </Button>
 
-            <EditForm openModal={openModal} setOpenModal={setOpenModal} movieInfo={editMovieInfo}/>
+            <EditForm openModal={openEditModal} setOpenModal={setOpenEditModal} movieInfo={editMovieInfo}/>
+            <AddForm openModal={openAddModal} setOpenModal={setOpenAddModal}/>
         </div>
     );
 }

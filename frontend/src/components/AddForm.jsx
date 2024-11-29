@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Checkbox, Table, Button } from "flowbite-react";
-import { Label, Modal, TextInput } from "flowbite-react";
+import { Label, Modal, TextInput, Button } from "flowbite-react";
 
 import { Select } from "flowbite-react";
 
 
-export default function EditForm({ openModal, setOpenModal, movieInfo }) {
+export default function AddForm({ openModal, setOpenModal}) {
     // console.log(data);
     // const [movieInfo, setMovieInfo] = useState(data);
 
@@ -13,7 +12,6 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
     // console.log(movieInfo);
 
     // let movieInfo = JSON.parse(JSON.stringify(data));
-
     const handleSubmit = (e) => {};
 
     const mpa_ratings = ["G", "PG", "PG-13", "R", "NC-17"];
@@ -22,7 +20,7 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
             <Modal.Header />
             <Modal.Body>
                 <div className="space-y-6">
-                    <h3 className="text-xl font-medium text-gray-900 dark:text-white">Edit Movie with ID {movieInfo.id}</h3>
+                    <h3 className="text-xl font-medium text-gray-900 dark:text-white">Add a new Movie</h3>
                     <div>
                         <div className="mb-2 block">
                             <Label htmlFor="title" value="Movie Title" />
@@ -30,7 +28,6 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
                         <TextInput
                             id="title"
                             placeholder="Enter movie title"
-                            defaultValue={movieInfo.title}
                             required
                         />
                     </div>
@@ -45,9 +42,7 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
                             <TextInput
                                 id="country"
                                 placeholder="Enter country"
-                                // defaultValue={movieInfo.country}
-                                value={movieInfo.country || ""}
-                                onChange={(e) => setMovieInfo({ ...movieInfo, country: e.target.value })}
+                                // onChange={(e) => setMovieInfo({ ...movieInfo, country: e.target.value })}
                                 required />
                         </div>
 
@@ -58,7 +53,6 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
                             <TextInput
                                 id="budget"
                                 placeholder="Enter budget"
-                                defaultValue={movieInfo.budget}
                                 required />
                         </div>
 
@@ -68,7 +62,7 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
                             </div>
                             <Select id="countries" required>
                                 {mpa_ratings.map((rating) => (
-                                    <option key={rating} value={rating} selected={rating==movieInfo.mpa_rating}>
+                                    <option key={rating} value={rating}>
                                         {rating}
                                     </option>
                                 ))}
@@ -83,7 +77,6 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
                         <TextInput
                             id="description"
                             placeholder="Enter description"
-                            defaultValue={movieInfo.description}
                             required />
                     </div>
 
@@ -96,7 +89,6 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
                             <TextInput
                                 id="released_year"
                                 placeholder="Enter released year"
-                                defaultValue={movieInfo.released_year}
                                 required />
                         </div>
                         <div className="mb-2 ml-2 inline-block flex-1">
@@ -106,13 +98,12 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
                             <TextInput
                                 id="studio_id"
                                 placeholder="Enter studio ID"
-                                defaultValue={movieInfo.studio_id}
                                 required />
                         </div>
                     </div>
 
-                    <div className="w-full">
-                        <Button>Update</Button>
+                    <div className="w-full" onClick={handleSubmit}>
+                        <Button>Add</Button>
                     </div>
 
                 </div>
