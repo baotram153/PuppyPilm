@@ -71,40 +71,42 @@ export default function HomeTable() {
             });
     }, []);
     const handleSearch = () => {
+        const queryParams = [
+            searchTitle && `title=${searchTitle}`,
+            searchAge && `age=${searchAge}`,
+            searchYear && `releasedYear=${searchYear}`,
+            searchCountry && `countryName=${searchCountry}`,
+            searchRate && `rating=${searchRate}`,
+        ]
+            .filter(Boolean)
+            .join('&');
+
         axios
-            .get(
-                `https://puppypilm.tatrungtin.id.vn/api/movies?${
-                    searchTitle ? `title=${searchTitle}` : ''
-                }${searchAge ? `age=${searchAge}` : ''}${
-                    searchYear ? `releasedYear=${searchYear}` : ''
-                }${searchCountry ? `countryName=${searchCountry}` : ''}${
-                    searchRate ? `rating=${searchRate}` : ''
-                }`
-            )
+            .get(`https://puppypilm.tatrungtin.id.vn/api/movies?${queryParams}`)
             .then((res) => {
                 setData(res.data.data); // Dữ liệu từ API
             })
             .catch((error) => {
-                console.error('Lỗi khi gọi API:', error); // Log lỗi
+                console.error('Lỗi khi gọi API:', error);
             });
-        // Tách các genre từ chuỗi searchGenre
+    };
+
+    useEffect(() => {
         const searchGenres = searchGenre
             .toLowerCase()
             .split(', ')
-            .filter((genre) => genre !== ''); // Loại bỏ các chuỗi rỗng
+            .filter((genre) => genre !== '');
+
         const result = data.filter((row) => {
-            // Kiểm tra điều kiện từng trường
             const isGenreMatch =
                 searchGenres.every((genre) =>
                     row.genres.map((g) => g?.toLowerCase()).includes(genre)
                 ) || searchGenre === '';
-            // Kết hợp tất cả điều kiện
             return isGenreMatch;
         });
 
-        // Cập nhật dữ liệu đã lọc vào state
         setFilteredData(result);
-    };
+    }, [data, searchGenre]);
 
     return (
         <div>
