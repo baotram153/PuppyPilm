@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { Checkbox, Table, Button} from "flowbite-react";
+import { useEffect, useState } from "react";
+import { Checkbox, Table, Button } from "flowbite-react";
 import { Label, Modal, TextInput } from "flowbite-react";
 import EditForm from "./EditForm";
 import AddForm from "./AddForm";
+import axios from "axios";
 
 export default function MovieTable() {
     const [data, setData] = useState(
@@ -48,11 +49,31 @@ export default function MovieTable() {
                 studio_id: 1
             }
         ]);
-    
+
     const [checkedRows, setCheckedRows] = useState(new Set());
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openAddModal, setOpenAddModal] = useState(false);
     const [editMovieInfo, setEditMovieInfo] = useState({});
+
+    const [alert, setAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [success, setSuccess] = useState(false);
+    const [fetchData, setFetchData] = useState(false);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("https://puppypilm.tatrungtin.id.vn/api/movies/all");
+                console.log("Fetched Data:", response.data);
+                setData(response.data.data);
+            } catch (error) {
+                console.error("Fetch data error:", error);
+            }
+        }
+        fetchData();
+        return () => {setFetchData(false)};
+    }, [fetchData]);
 
     const toggleRow = (id) => {
         setCheckedRows((prev) => {
@@ -66,23 +87,69 @@ export default function MovieTable() {
         });
     };
 
+    
+
     const handleDelete = () => {
-        const selectedRows = data.filter((row) => checkedRows.has(row.id));
+        const selectedRows = data.filter((row) => checkedRows.has(row.movie_id));
         console.log("Deleted rows:", selectedRows);
 
+        // for (let movie_id of checkedRows) {
+        //     console.log(movie_id);
+        // }
+
         // Remove rows from table
-        setData(data.filter((row) => !checkedRows.has(row.id)));
+        // setData(data.filter((row) => !checkedRows.has(row.movie_id)));
+        for (let movie_id of checkedRows) {
+            axios
+                .delete(`https://puppypilm.tatrungtin.id.vn/api/movies/${movie_id}`)
+                .then((response) => {
+                    console.log('Movie deleted successfully:', response.data);
+                    setAlert(true);
+                    setAlertMessage(response.data.message);
+                    setSuccess(response.data.success);
+                    setFetchData(true);
+                    // You can update your state or UI here if needed
+                })
+                .catch((error) => {
+                    console.error('Error deleting movie:', error.response || error.message);
+                    setAlert(true);
+                    setAlertMessage(error.response.data.message);
+                    setSuccess(error.response.data.success);
+                });
+        }
         setCheckedRows(new Set());
+        
     };
 
     const handleAdd = () => {
         setOpenAddModal(true);
     };
 
-
-
     return (
         <div className="overflow-x-auto">
+            {alert && success && (
+            <div className="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                </svg>
+                <span class="sr-only">Info</span>
+                <div>
+                    <span class="font-medium">{alertMessage}</span>
+                </div>
+            </div>)}
+
+            {alert && !success && (
+                <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                </svg>
+                <span class="sr-only">Info</span>
+                <div>
+                  <span class="font-medium">{alertMessage}</span>
+                </div>
+              </div>
+            )
+            }
             <Button className="m-4" onClick={handleAdd}>
                 Add Movie
             </Button>
@@ -92,7 +159,7 @@ export default function MovieTable() {
                         <Checkbox
                             onChange={(e) => {
                                 if (e.target.checked) {
-                                    setCheckedRows(new Set(data.map((row) => row.id)));
+                                    setCheckedRows(new Set(data.map((row) => row.movie_id)));
                                 } else {
                                     setCheckedRows(new Set());
                                 }
@@ -117,15 +184,15 @@ export default function MovieTable() {
 
                 <Table.Body className="divide-y">
                     {data.map((row) => (
-                        <Table.Row key={row.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                        <Table.Row key={row.movie_id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                             <Table.Cell className="p-4">
                                 <Checkbox
-                                    onChange={() => toggleRow(row.id)}
-                                    checked={checkedRows.has(row.id)}
+                                    onChange={() => toggleRow(row.movie_id)}
+                                    checked={checkedRows.has(row.movie_id)}
                                 />
                             </Table.Cell>
                             <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                {row.id}
+                                {row.movie_id}
                             </Table.Cell>
                             <Table.Cell>{row.country}</Table.Cell>
                             <Table.Cell>{row.budget}</Table.Cell>
@@ -137,9 +204,10 @@ export default function MovieTable() {
                             <Table.Cell>
                                 <a onClick={() => {
                                     setOpenEditModal(true);
-                                    setEditMovieInfo(row);}
-                                } 
-                                href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
+                                    setEditMovieInfo(row);
+                                }
+                                }
+                                    href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
                                     Edit
                                 </a>
                             </Table.Cell>
@@ -153,8 +221,8 @@ export default function MovieTable() {
                 disabled={checkedRows.size === 0}>Delete
             </Button>
 
-            <EditForm openModal={openEditModal} setOpenModal={setOpenEditModal} movieInfo={editMovieInfo}/>
-            <AddForm openModal={openAddModal} setOpenModal={setOpenAddModal}/>
+            <EditForm openModal={openEditModal} setOpenModal={setOpenEditModal} movieInfo={editMovieInfo} setAlert={setAlert} setAlertMessage={setAlertMessage} setSuccess={setSuccess} setFetchData={setFetchData}/>
+            <AddForm openModal={openAddModal} setOpenModal={setOpenAddModal} setAlert={setAlert} setAlertMessage={setAlertMessage} setSuccess={setSuccess} setFetchData={setFetchData}/>
         </div>
     );
 }

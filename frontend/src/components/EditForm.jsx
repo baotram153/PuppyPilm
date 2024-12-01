@@ -3,18 +3,45 @@ import { Checkbox, Table, Button } from "flowbite-react";
 import { Label, Modal, TextInput } from "flowbite-react";
 
 import { Select } from "flowbite-react";
+import axios from "axios";
+import { useForm } from "react-hook-form";
 
 
-export default function EditForm({ openModal, setOpenModal, movieInfo }) {
+export default function EditForm({ openModal, setOpenModal, movieInfo, setAlert, setAlertMessage, setSuccess, setFetchData}) {
     // console.log(data);
-    // const [movieInfo, setMovieInfo] = useState(data);
+    // const [movieInfo, setMovieInfo] = useState(inMovieInfo);
 
     // let [movieInfo, setMovieInfo] = useState(JSON.parse(JSON.stringify(data)));
     // console.log(movieInfo);
 
     // let movieInfo = JSON.parse(JSON.stringify(data));
 
-    const handleSubmit = (e) => {};
+    const { register, handleSubmit } = useForm();
+
+    const onSubmit = (data) => {
+        console.log(data);
+        // e.preventDefault();
+
+        axios.patch(`https://puppypilm.tatrungtin.id.vn/api/movies/${movieInfo.movie_id}`, data, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }) 
+            .then((response) => {
+                console.log("Update movie success:", response);
+                setAlert(true);
+                setAlertMessage(response.data.message);
+                setSuccess(response.data.success);
+                setFetchData(true);
+            })
+            .catch((error) => {
+                console.error("Update movie error:", error);
+                setAlert(true);
+                setAlertMessage(error.response.data.message);
+                setSuccess(error.response.data.success);
+            });
+        setOpenModal(false);
+    };
 
     const mpa_ratings = ["G", "PG", "PG-13", "R", "NC-17"];
     return (
@@ -22,7 +49,8 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
             <Modal.Header />
             <Modal.Body>
                 <div className="space-y-6">
-                    <h3 className="text-xl font-medium text-gray-900 dark:text-white">Edit Movie with ID {movieInfo.id}</h3>
+                    <h3 className="text-xl font-medium text-gray-900 dark:text-white">Edit Movie with ID {movieInfo.movie_id}</h3>
+                    <form method="POST" onSubmit={handleSubmit(onSubmit)}>
                     <div>
                         <div className="mb-2 block">
                             <Label htmlFor="title" value="Movie Title" />
@@ -32,6 +60,7 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
                             placeholder="Enter movie title"
                             defaultValue={movieInfo.title}
                             required
+                            {...register("title")}
                         />
                     </div>
 
@@ -45,9 +74,10 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
                             <TextInput
                                 id="country"
                                 placeholder="Enter country"
-                                // defaultValue={movieInfo.country}
-                                value={movieInfo.country || ""}
-                                onChange={(e) => setMovieInfo({ ...movieInfo, country: e.target.value })}
+                                defaultValue={movieInfo.country}
+                                // value={movieInfo.country || ""}
+                                // onChange={(e) => setMovieInfo({ ...movieInfo, country: e.target.value })}
+                                {...register("country")}
                                 required />
                         </div>
 
@@ -59,14 +89,15 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
                                 id="budget"
                                 placeholder="Enter budget"
                                 defaultValue={movieInfo.budget}
+                                {...register("budget")}
                                 required />
                         </div>
 
                         <div className="mb-2 ml-2 inline-block flex-1">
                             <div>
-                                <Label htmlFor="mpa_rating" value="MPA Rating" />
+                                <Label htmlFor="mpaRating" value="MPA Rating" />
                             </div>
-                            <Select id="countries" required>
+                            <Select id="mpaRating" {...register("mpaRating")} required>
                                 {mpa_ratings.map((rating) => (
                                     <option key={rating} value={rating} selected={rating==movieInfo.mpa_rating}>
                                         {rating}
@@ -84,6 +115,7 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
                             id="description"
                             placeholder="Enter description"
                             defaultValue={movieInfo.description}
+                            {...register("description")}
                             required />
                     </div>
 
@@ -91,29 +123,32 @@ export default function EditForm({ openModal, setOpenModal, movieInfo }) {
 
                         <div className="mb-2 mr-2 inline-block flex-1">
                             <div>
-                                <Label htmlFor="released_year" value="Released Year" />
+                                <Label htmlFor="releasedYear" value="Released Year" />
                             </div>
                             <TextInput
-                                id="released_year"
+                                id="releasedYear"
                                 placeholder="Enter released year"
                                 defaultValue={movieInfo.released_year}
+                                {...register("releasedYear")}
                                 required />
                         </div>
                         <div className="mb-2 ml-2 inline-block flex-1">
                             <div>
-                                <Label htmlFor="studio_id" value="Studio ID" />
+                                <Label htmlFor="studioId" value="Studio ID" />
                             </div>
                             <TextInput
-                                id="studio_id"
+                                id="studioId"
                                 placeholder="Enter studio ID"
                                 defaultValue={movieInfo.studio_id}
+                                {...register("studioId")}
                                 required />
                         </div>
                     </div>
 
                     <div className="w-full">
-                        <Button>Update</Button>
+                        <Button type="submit">Update</Button>
                     </div>
+                    </form>
 
                 </div>
             </Modal.Body>
