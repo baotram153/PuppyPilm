@@ -1,120 +1,112 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table, TextInput, Button, Select } from 'flowbite-react';
-
+import axios from 'axios';
 export default function HomeTable() {
-    const [data, setData] = useState([
-        {
-            title: 'Breaking Bad - Season 1',
-            description:
-                'Diagnosed with terminal lung cancer, chemistry teacher Walter White teams up with former student Jesse Pinkman to cook and sell crystal meth.',
-            mpa_rating: 'R',
-            released_year: 2008,
-            studio: 'bk_entertainment',
-            trailer: 'https://www.youtube.com/watch?v=t06RUxPbp_c',
-            genre: ['action', 'animation', 'comedy'],
-            rate: '9',
-        },
-        {
-            title: "Schindler's List",
-            description:
-                'In German-occupied Poland during World War II, industrialist Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis.',
-            mpa_rating: 'PG-13',
-            released_year: 1993,
-            studio: 'bk_film',
-            trailer: 'https://www.youtube.com/watch?v=t06RUxPbp_c',
-            genre: ['action', 'animation', 'drama', 'experimental'],
-            rate: '8',
-        },
-        {
-            title: "Singin' in the Rain",
-            description:
-                'A silent film star falls for a chorus girl when he and his jealous screen partner are trying to make the difficult transition to talking pictures in 1920s Hollywood.',
-            mpa_rating: 'G',
-            released_year: 1952,
-            studio: 'bk_entertainment',
-            trailer: 'https://www.youtube.com/watch?v=t06RUxPbp_c',
-            genre: ['action', 'comedy'],
-            rate: '2',
-        },
-        {
-            title: 'Breaking Bad - Season 2',
-            description:
-                'Walt and Jesse realize how dire their situation is. They must come up with a plan to kill Tuco before Tuco kills them first.',
-            mpa_rating: 'NC-17',
-            released_year: 2009,
-            studio: 'bk_film',
-            trailer: 'https://www.youtube.com/watch?v=t06RUxPbp_c',
-            genre: ['animation', 'comedy'],
-            rate: '3',
-        },
-    ]);
+    const [data, setData] = useState([]);
 
+    // {
+    //     title: 'Breaking Bad - Season 1',
+    //     description:
+    //         'Diagnosed with terminal lung cancer, chemistry teacher Walter White teams up with former student Jesse Pinkman to cook and sell crystal meth.',
+    //     mpa_rating: 'R',
+    //     released_year: 2008,
+    //     studio: 'bk_entertainment',
+    //     trailer: 'https://www.youtube.com/watch?v=t06RUxPbp_c',
+    //     genre: ['action', 'animation', 'comedy'],
+    //     rate: '9',
+    // },
+    // {
+    //     title: "Schindler's List",
+    //     description:
+    //         'In German-occupied Poland during World War II, industrialist Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis.',
+    //     mpa_rating: 'PG-13',
+    //     released_year: 1993,
+    //     studio: 'bk_film',
+    //     trailer: 'https://www.youtube.com/watch?v=t06RUxPbp_c',
+    //     genre: ['action', 'animation', 'drama', 'experimental'],
+    //     rate: '8',
+    // },
+    // {
+    //     title: "Singin' in the Rain",
+    //     description:
+    //         'A silent film star falls for a chorus girl when he and his jealous screen partner are trying to make the difficult transition to talking pictures in 1920s Hollywood.',
+    //     mpa_rating: 'G',
+    //     released_year: 1952,
+    //     studio: 'bk_entertainment',
+    //     trailer: 'https://www.youtube.com/watch?v=t06RUxPbp_c',
+    //     genre: ['action', 'comedy'],
+    //     rate: '2',
+    // },
+    // {
+    //     title: 'Breaking Bad - Season 2',
+    //     description:
+    //         'Walt and Jesse realize how dire their situation is. They must come up with a plan to kill Tuco before Tuco kills them first.',
+    //     mpa_rating: 'NC-17',
+    //     released_year: 2009,
+    //     studio: 'bk_film',
+    //     trailer: 'https://www.youtube.com/watch?v=t06RUxPbp_c',
+    //     genre: ['animation', 'comedy'],
+    //     rate: '3',
+    // }
     // State for search terms
     const [searchTitle, setSearchTitle] = useState('');
     const [searchAge, setSearchAge] = useState('');
     const [searchYear, setSearchYear] = useState('');
-    const [searchStudio, setSearchStudio] = useState('');
+    const [searchCountry, setSearchCountry] = useState('');
     const [searchGenre, setSearchGenre] = useState('');
     const [searchRate, setSearchRate] = useState('');
 
     // State for filtered data
-    const [filteredData, setFilteredData] = useState(data);
+    const [filteredData, setFilteredData] = useState([]);
 
+    useEffect(() => {
+        axios
+            .get('https://puppypilm.tatrungtin.id.vn/api/movies')
+            .then((res) => {
+                setData(res.data.data); // Dữ liệu từ API
+                setFilteredData(res.data.data);
+            })
+            .catch((error) => {
+                console.error('Lỗi khi gọi API:', error); // Log lỗi
+            });
+    }, []);
     const handleSearch = () => {
-        const mpa_age = {
-            G: 0,
-            PG: 10,
-            'PG-13': 13,
-            R: 18,
-            'NC-17': 18,
-        };
+        const queryParams = [
+            searchTitle && `title=${searchTitle}`,
+            searchAge && `age=${searchAge}`,
+            searchYear && `releasedYear=${searchYear}`,
+            searchCountry && `countryName=${searchCountry}`,
+            searchRate && `rating=${searchRate}`,
+        ]
+            .filter(Boolean)
+            .join('&');
 
-        // Tách các genre từ chuỗi searchGenre
+        axios
+            .get(`https://puppypilm.tatrungtin.id.vn/api/movies?${queryParams}`)
+            .then((res) => {
+                setData(res.data.data); // Dữ liệu từ API
+            })
+            .catch((error) => {
+                console.error('Lỗi khi gọi API:', error);
+            });
+    };
+
+    useEffect(() => {
         const searchGenres = searchGenre
             .toLowerCase()
             .split(', ')
-            .filter((genre) => genre !== ''); // Loại bỏ các chuỗi rỗng
+            .filter((genre) => genre !== '');
 
         const result = data.filter((row) => {
-            // Kiểm tra điều kiện từng trường
-            const isTitleMatch =
-                row.title.toLowerCase().includes(searchTitle.toLowerCase()) ||
-                searchTitle === '';
-
-            const isAgeMatch =
-                mpa_age[row.mpa_rating] <= Number(searchAge) ||
-                searchAge === '';
-
-            const isYearMatch =
-                row.released_year >= Number(searchYear) || searchYear === '';
-
-            const isStudioMatch =
-                row.studio.toLowerCase().includes(searchStudio.toLowerCase()) ||
-                searchStudio === '';
-
             const isGenreMatch =
                 searchGenres.every((genre) =>
-                    row.genre.map((g) => g.toLowerCase()).includes(genre)
+                    row.genres.map((g) => g?.toLowerCase()).includes(genre)
                 ) || searchGenre === '';
-
-            const isRateMatch =
-                row.rate.toLowerCase().includes(searchRate.toLowerCase()) ||
-                searchRate === '';
-
-            // Kết hợp tất cả điều kiện
-            return (
-                isTitleMatch &&
-                isAgeMatch &&
-                isYearMatch &&
-                isStudioMatch &&
-                isGenreMatch &&
-                isRateMatch
-            );
+            return isGenreMatch;
         });
 
-        // Cập nhật dữ liệu đã lọc vào state
         setFilteredData(result);
-    };
+    }, [data, searchGenre]);
 
     return (
         <div>
@@ -134,14 +126,14 @@ export default function HomeTable() {
                     </div>
                     <div>
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">
-                            Studio
+                            Country
                         </label>
                         <TextInput
                             type="text"
-                            value={searchStudio}
-                            onChange={(e) => setSearchStudio(e.target.value)}
+                            value={searchCountry}
+                            onChange={(e) => setSearchCountry(e.target.value)}
                             className="mb-2"
-                            placeholder="Search by Studio"
+                            placeholder="Search by Country"
                         />
                     </div>
                     <div>
@@ -217,6 +209,7 @@ export default function HomeTable() {
                         <Table.HeadCell>MPA Rating</Table.HeadCell>
                         <Table.HeadCell>Released Year</Table.HeadCell>
                         <Table.HeadCell>Studio</Table.HeadCell>
+                        <Table.HeadCell>Country</Table.HeadCell>
                         <Table.HeadCell>Trailer</Table.HeadCell>
                         <Table.HeadCell>Genre</Table.HeadCell>
                         <Table.HeadCell>Rate</Table.HeadCell>
@@ -231,11 +224,18 @@ export default function HomeTable() {
                                 <Table.Cell className="text-center">
                                     {index + 1}
                                 </Table.Cell>
-                                <Table.Cell>{row.title}</Table.Cell>
-                                <Table.Cell>{row.description}</Table.Cell>
-                                <Table.Cell>{row.mpa_rating}</Table.Cell>
-                                <Table.Cell>{row.released_year}</Table.Cell>
-                                <Table.Cell>{row.studio}</Table.Cell>
+                                <Table.Cell>{row.title ?? 'N/A'}</Table.Cell>
+                                <Table.Cell>
+                                    {row.description ?? 'N/A'}
+                                </Table.Cell>
+                                <Table.Cell>
+                                    {row.mpa_rating ?? 'N/A'}
+                                </Table.Cell>
+                                <Table.Cell>
+                                    {row.released_year ?? 'N/A'}
+                                </Table.Cell>
+                                <Table.Cell>{row.studio ?? 'N/A'}</Table.Cell>
+                                <Table.Cell>{row.country ?? 'N/A'}</Table.Cell>
                                 <Table.Cell>
                                     <a
                                         href={row.trailer}
@@ -245,9 +245,13 @@ export default function HomeTable() {
                                         Link
                                     </a>
                                 </Table.Cell>
-                                <Table.Cell>{row.genre.join(', ')}</Table.Cell>
+                                <Table.Cell>
+                                    {row.genres?.join(', ')}
+                                </Table.Cell>
                                 <Table.Cell className="text-center">
-                                    {row.rate}
+                                    {row.average_rate
+                                        ? Number(row.average_rate).toFixed(1)
+                                        : 'N/A'}
                                 </Table.Cell>
                             </Table.Row>
                         ))}
