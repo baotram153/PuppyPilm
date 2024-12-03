@@ -295,3 +295,63 @@ VALUES ('https://www.youtube.com/watch?v=t06RUxPbp_c',12, '2024-11-18', 3)
 INSERT INTO participant (first_name, mid_name, last_name, nationality, dob) 
 VALUES ('uchiha', '', 'itachi', 'Japan', '2000-12-12')
 
+---------------------------------------------------- Khang ----------------------------------------------- 
+-- Calulate Member ranking
+INSERT INTO "user" (user_id, email, hashed_password, displayed_name, house_number, street, district, city)
+VALUES
+    (1,'tatrungtin2004@gmail.com', 'abc', 'tinta', '246', 'Ly Thuong Kiet', 'District 10', 'Ho Chi Minh City'),
+    (2,'baotram2004@gmail.com', '123', 'tramdang', '357', 'Ngo Quyen', 'Dong Da', 'Ha Noi'),
+    (3,'khang@example.com', 'noPass', 'KhangPham', '789', 'Hai Ba Trung', 'District 1', 'Ho Chi Minh City'),
+    (4,'khanh@example.com', 'xyz', 'KhanhNguyen', '101', 'Dien Bien Phu', 'District 3', 'Ho Chi Minh City');
+
+INSERT INTO movie (movie_id, country, budget, title, description, mpa_rating, released_year, studio_id)
+VALUES
+    (1,'United States', 200, 'Breaking Bad - Season 1', 
+     'Diagnosed with terminal lung cancer, chemistry teacher Walter White teams up with former student Jesse Pinkman to cook and sell crystal meth.', 
+     'R', 2008, 1),
+    (2,'Germany', 500, 'Schindler''s List', 
+     'In German-occupied Poland during World War II, industrialist Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis.', 
+     'R', 1993, 2),
+    (3,'England', 700, 'Singin'' in the Rain', 
+     'A silent film star falls for a chorus girl when he and his jealous screen partner are trying to make the difficult transition to talking pictures in 1920s Hollywood.', 
+     'G', 1952, 3),
+    (4,'United States', 300, 'Breaking Bad - Season 2', 
+     'Walt and Jesse realize how dire their situation is. They must come up with a plan to kill Tuco before Tuco kills them first.', 
+     'R', 2009, 1),
+    (5,'United Kingdom', 50, 'The Fog of War', 
+     'An Academy Award-winning documentary examining the complex lessons from the U.S. involvement in Vietnam and Robert S. McNamara’s tenure as Secretary of Defense.', 
+     'PG-13', 2003, 2),
+    (6,'Germany', 40, 'The Berlin Wall: Escape to Freedom', 
+     'A detailed documentary about the rise and fall of the Berlin Wall and the courageous attempts to escape from East to West Germany.', 
+     'PG', 2012, 2),
+    (7,'United States', 40, 'The Last Dance', 
+     'A documentary chronicling Michael Jordan’s career and his final season with the Chicago Bulls.', 
+     'R', 2020, 3),
+    (8,'United Kingdom', 25, 'Becoming Bond', 
+     'The story of George Lazenby, a car mechanic who became James Bond for one movie and walked away from fame.', 
+     'R', 2017, 1);
+
+INSERT INTO review (user_id, timestamp, movie_id, comment)
+VALUES
+    (1, '2024-01-01', 1, 'Amazing movie!'),
+    (1, '2024-02-01', 2, 'Mind-blowing concepts!'),
+    (1, '2024-03-01', 3, 'Lovely and artistic.'),
+    (2, '2024-01-15', 4, 'Good, but confusing.'),
+    (2, '2024-02-20', 1, 'Enjoyable but slow.'),
+    (3, '2024-03-10', 2, 'Absolutely delightful!'),
+    (3, '2024-03-15', 3, 'A masterpiece.');
+    (4, '2024-03-15', 4, 'Dinh noc, kich tran, bay phap phoi.');
+
+INSERT INTO likes_movie (user_id, movie_id)
+VALUES
+    (1, 1), (1, 2), (1, 3),
+    (2, 4), (2, 1), (2, 3), (2,4), (2,5), (2,6)
+    (3, 2), (3, 3), (3, 4), 
+    (4, 1);
+
+INSERT INTO rates (user_id, movie_id, rate_point)
+VALUES
+    (1, 1, 5), (1, 2, 4), (1, 3, 5),
+    (2, 4, 3), (2, 1, 4), (2, 2, 6)
+    (3, 2, 5), 
+    (4, 3, 5), (4, 4, 4);
