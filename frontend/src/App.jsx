@@ -7,6 +7,7 @@ import FilterRate from './pages/FilterRate';
 import HomePage from './pages/HomePage';
 import About from './pages/About';
 import SeeAward from './pages/SeeAward';
+import RankPage from './pages/RankPage';
 import DefaultLayout from './layout/DefaultLayout';
 function App() {
     const [count, setCount] = useState(0);
@@ -31,6 +32,11 @@ function App() {
                         exact
                         path="see-award-rate"
                         element={<SeeAward />}
+                    ></Route>
+                    <Route
+                        exact
+                        path="rank-page"
+                        element={<RankPage />}
                     ></Route>
                     <Route exact path="about" element={<About />}></Route>
                 </Routes>
