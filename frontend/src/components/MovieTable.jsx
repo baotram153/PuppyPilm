@@ -60,7 +60,6 @@ export default function MovieTable() {
     const [success, setSuccess] = useState(false);
     const [fetchData, setFetchData] = useState(false);
 
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -176,10 +175,12 @@ export default function MovieTable() {
                     <Table.HeadCell>MPA Rating</Table.HeadCell>
                     <Table.HeadCell>Released Year</Table.HeadCell>
                     <Table.HeadCell>Studio ID</Table.HeadCell>
+                    <Table.HeadCell>Action</Table.HeadCell>
 
-                    <Table.HeadCell>
+                    {/* <Table.HeadCell>
                         <span className="sr-only">Edit</span>
-                    </Table.HeadCell>
+                    </Table.HeadCell> */}
+
                 </Table.Head>
 
                 <Table.Body className="divide-y">

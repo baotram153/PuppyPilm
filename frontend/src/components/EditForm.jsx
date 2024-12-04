@@ -115,8 +115,7 @@ export default function EditForm({ openModal, setOpenModal, movieInfo, setAlert,
                             id="description"
                             placeholder="Enter description"
                             defaultValue={movieInfo.description}
-                            {...register("description")}
-                            required />
+                            {...register("description")} />
                     </div>
 
                     <div className="flex flex-row justify-between">
@@ -130,7 +129,7 @@ export default function EditForm({ openModal, setOpenModal, movieInfo, setAlert,
                                 placeholder="Enter released year"
                                 defaultValue={movieInfo.released_year}
                                 {...register("releasedYear")}
-                                required />
+                                />
                         </div>
                         <div className="mb-2 ml-2 inline-block flex-1">
                             <div>
@@ -141,7 +140,7 @@ export default function EditForm({ openModal, setOpenModal, movieInfo, setAlert,
                                 placeholder="Enter studio ID"
                                 defaultValue={movieInfo.studio_id}
                                 {...register("studioId")}
-                                required />
+                                />
                         </div>
                     </div>
 

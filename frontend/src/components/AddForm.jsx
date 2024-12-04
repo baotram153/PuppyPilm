@@ -110,7 +110,7 @@ export default function AddForm({ openModal, setOpenModal, setAlert, setAlertMes
                             id="description"
                             placeholder="Enter description"
                             {...register("description")}
-                            required />
+                            required/>
                     </div>
 
                     <div className="flex flex-row justify-between">
