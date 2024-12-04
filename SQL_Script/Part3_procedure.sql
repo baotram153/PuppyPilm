@@ -20,7 +20,7 @@ BEGIN
             released_year, 
             mpa_rating, 
             description, 
-            "LINK" AS link_trailer, 
+            "link" AS link_trailer, 
             studio.name AS studio, 
             AVG(rate_point) AS average_rate,
             ARRAY_AGG(DISTINCT BELONGS_TO.genre_name) AS genres
@@ -56,8 +56,6 @@ END;
 $$;
 
 
-
-
 DO $$
 DECLARE
     result_cursor REFCURSOR;
@@ -87,7 +85,6 @@ DROP PROCEDURE get_movies_by_conditions;
 -- Xóa bảng truy vấn tạm thời
 DROP TABLE IF EXISTS temp_result;
 
-
 -- Tạo kiểu dữ liệu mới
 CREATE TYPE movie_type AS (
     movie_id INT,
@@ -103,27 +100,7 @@ CREATE TYPE movie_type AS (
     genres TEXT[]
 );
 
-
---Thêm dữ liệu để cô xem
-INSERT INTO studio ("name", founded_year)
-VALUES
-    ('Warner Bros', 1923),
-    ('Universal Pictures', 1912),
-    ('Pixar Animation Studios', 1986),
-    ('Marvel Studios', 1993),
-    ('Paramount Pictures', 1912),
-    ('Sony Pictures', 1987);
-
-INSERT INTO movie (title, country, budget, released_year, mpa_rating, description, studio_id)
-VALUES
-    ('Inception', 'USA', 160000000, 2010, 'PG-13', 'A mind-bending thriller.', 1),
-    ('The Dark Knight', 'USA', 185000000, 2008, 'PG-13', 'A tale of Batman and Joker.', 1),
-    ('Finding Nemo', 'USA', 94000000, 2003, 'G', 'A story of a lost fish.', 3),
-    ('Iron Man', 'USA', 140000000, 2008, 'PG-13', 'The origin of Iron Man.', 4),
-    ('The Avengers', 'USA', 220000000, 2012, 'PG-13', 'Earths mightiest heroes.', 4),
-    ('Spider-Man', 'USA', 139000000, 2002, 'PG-13', 'A boy becomes a superhero.', 6);
-
---Tạo hàm để chạy backend
+-- function gọi procedure
 CREATE OR REPLACE FUNCTION call_get_movies_by_conditions(
     in_title VARCHAR DEFAULT NULL,
     in_age INT DEFAULT NULL,
@@ -167,12 +144,32 @@ END;
 $$;
 
 
---Tín dùng lệnh này để dùng trong backend
 -- Gọi hàm để kiểm tra kết quả
 SELECT * 
 FROM call_get_movies_by_conditions(NULL, 10);
 
 
+--Thêm dữ liệu để cô xem
+INSERT INTO studio ("name", founded_year)
+VALUES
+    ('Warner Bros', 1923),
+    ('Universal Pictures', 1912),
+    ('Pixar Animation Studios', 1986),
+    ('Marvel Studios', 1993),
+    ('Paramount Pictures', 1912),
+    ('Sony Pictures', 1987);
+
+INSERT INTO movie (title, country, budget, released_year, mpa_rating, description, studio_id)
+VALUES
+    ('Inception', 'USA', 160000000, 2010, 'PG-13', 'A mind-bending thriller.', 1),
+    ('The Dark Knight', 'USA', 185000000, 2008, 'PG-13', 'A tale of Batman and Joker.', 1),
+    ('Finding Nemo', 'USA', 94000000, 2003, 'G', 'A story of a lost fish.', 3),
+    ('Iron Man', 'USA', 140000000, 2008, 'PG-13', 'The origin of Iron Man.', 4),
+    ('The Avengers', 'USA', 220000000, 2012, 'PG-13', 'Earths mightiest heroes.', 4),
+    ('Spider-Man', 'USA', 139000000, 2002, 'PG-13', 'A boy becomes a superhero.', 6);
+    
+    
+    
 
 --Thủ tục get_reviews_by_movie_id
 -- Tạo PROCEDURE get_users_reviews_by_movie_id(cursor reviews_cursor, cursor users_cursor, int movie_id, int in_number_reviews)
@@ -189,19 +186,19 @@ BEGIN
     OPEN reviews_cursor FOR
       SELECT 
         u.displayed_name, 
-        r."COMMENT", 
-        r."TIMESTAMP" as timestamp
-      FROM "user" as u
+        r."comment", 
+        r."timestamp" as timestamp
+      FROM "USER" as u
       INNER JOIN review as r ON u.user_id = r.user_id
       WHERE r.movie_id = in_movie_id
-      ORDER BY u.displayed_name, r."TIMESTAMP";
+      ORDER BY u.displayed_name, r."timestamp";
 
     -- Mở con trỏ users_cursor
     OPEN users_cursor FOR
       SELECT 
         u.displayed_name,
         COUNT(*) as number_reviews
-      FROM "user" as u
+      FROM "USER" as u
       INNER JOIN review as r ON u.user_id = r.user_id
       WHERE r.movie_id = in_movie_id
       GROUP BY u.displayed_name
@@ -235,7 +232,7 @@ BEGIN
         FETCH NEXT FROM reviews_cursor INTO review_record;
         EXIT WHEN NOT FOUND;
         INSERT INTO temp_reviews (displayed_name, comment, timestamp)
-        VALUES (review_record.displayed_name, review_record."COMMENT", review_record.timestamp);
+        VALUES (review_record.displayed_name, review_record."comment", review_record.timestamp);
     END LOOP;
 
     -- Tạo bảng tạm thời để lưu trữ kết quả từ users_cursor
@@ -265,7 +262,7 @@ DROP TABLE temp_users;
 SELECT displayed_name, comment, timestamp FROM temp_reviews;
 SELECT displayed_name, number_reviews FROM temp_users;
 --test
-INSERT INTO review (user_id, movie_id, "COMMENT", "TIMESTAMP")
+INSERT INTO review (user_id, movie_id, "comment", "timestamp")
 VALUES
     (1, 1, 'Amazing movie!', '2024-11-01 10:30:00'),
     (1, 1, 'Great cinematography.', '2024-11-02 11:00:00'),
@@ -291,7 +288,7 @@ BEGIN
   OPEN actor_cursor FOR 
     SELECT 
       actor.participant_id AS participant_id, 
-      participant.first_name || ' ' || participant.mid_name || ' ' || participant.last_name AS "name",
+      participant.firstname || ' ' || participant.middlename || ' ' || participant.lastname AS "name",
       COUNT(award_id) AS number_awards
     FROM 
       actor
@@ -299,7 +296,7 @@ BEGIN
       actor_award ON actor.participant_id = actor_award.actor_id
     LEFT JOIN 
       participant ON actor.participant_id = participant.participant_id
-    GROUP BY actor.participant_id, participant.first_name || ' ' || participant.mid_name || ' ' || participant.last_name
+    GROUP BY actor.participant_id, participant.firstname || ' ' || participant.middlename || ' ' || participant.lastname
     ORDER BY COUNT(award_id) DESC
     LIMIT COALESCE(number_actors, 10);
 END; 
@@ -330,3 +327,27 @@ SELECT * FROM temp_result;
 DROP PROCEDURE get_top_actors;
 
 DROP TABLE IF exists temp_result;
+
+INSERT INTO participant (participant_id, firstname, middlename, lastname, nationality, dob)
+VALUES 
+		(1, 'Margot', 'Elise', 'Robbie', 'Australian', '1990-07-02'),
+		(2, 'Emma', 'Charlotte', 'Watson', 'British', '1990-04-15'),
+		(3, 'Leonardo', 'Wilhelm', 'DiCaprio', 'American', '1974-11-11'),
+		(4, 'Chris', 'Robert', 'Evans', 'American', '1981-06-13'),
+		(5, 'Scarlett', 'Ingrid', 'Johansson', 'American', '1984-11-22'),
+		(6, 'Daniel', 'Jacob', 'Radcliffe', 'British', '1989-07-23'),
+		(7, 'Jennifer', 'Shrader', 'Lawrence', 'American', '1990-08-15'),
+		(8, 'Tom', 'Andrew', 'Holland', 'British', '1996-06-01');
+		
+INSERT INTO actor (participant_id)
+VALUES 
+		(1),
+		(2),
+		(5),
+		(6),
+		(7);
+INSERT INTO actor_award (award_id, actor_id, role, movie)
+VALUES
+    (1, 5, 'Protagonist', 'Crying'' in the rain'),
+    (2, 1, 'Protagonist', 'Singin'' in the rain'),
+    (2, 1, 'Protagonist', 'Singin'' in the rain');

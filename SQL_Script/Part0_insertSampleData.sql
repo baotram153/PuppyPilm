@@ -8,7 +8,7 @@ INSERT INTO movie (country, budget, title, description, mpa_rating, released_yea
 VALUES
     ('United States', 200, 'Breaking Bad - Season 1', 
      'Diagnosed with terminal lung cancer, chemistry teacher Walter White teams up with former student Jesse Pinkman to cook and sell crystal meth.', 
-     'TV-MA', 2008, 1),
+     'G', 2008, 1),
     ('Germany', 500, 'Schindler''s List', 
      'In German-occupied Poland during World War II, industrialist Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis.', 
      'R', 1993, 2),
@@ -17,7 +17,7 @@ VALUES
      'G', 1952, 3),
     ('United States', 300, 'Breaking Bad - Season 2', 
      'Walt and Jesse realize how dire their situation is. They must come up with a plan to kill Tuco before Tuco kills them first.', 
-     'TV-MA', 2009, 1),
+     'PG-13', 2009, 1),
     ('United Kingdom', 50, 'The Fog of War', 
      'An Academy Award-winning documentary examining the complex lessons from the U.S. involvement in Vietnam and Robert S. McNamara’s tenure as Secretary of Defense.', 
      'PG-13', 2003, 2),
@@ -26,14 +26,14 @@ VALUES
      'PG', 2012, 2),
     ('United States', 40, 'The Last Dance', 
      'A documentary chronicling Michael Jordan’s career and his final season with the Chicago Bulls.', 
-     'TV-MA', 2020, 3),
+     'G', 2020, 3),
     ('United Kingdom', 25, 'Becoming Bond', 
      'The story of George Lazenby, a car mechanic who became James Bond for one movie and walked away from fame.', 
-     'TV-14', 2017, 1);
+     'PG', 2017, 1);
 
 INSERT INTO remakes
 VALUES 
-    (1, 2);
+    (1, 2),(2, 3),(3, 4),(4, 5);
 
 INSERT INTO cinematic_movie
 VALUES 
@@ -45,7 +45,7 @@ VALUES
     (1, 8, 1, 'HBO'),
     (4, 10, 2, 'HBO');
 
-INSERT INTO "USER" (email, hashed_password, displayed_name, house_number, street, district, city)
+INSERT INTO "USER" (email, password, displayed_name, house_number, street, district, city)
 VALUES 
     ('tatrungtin2004@gmail.com', 'abc', 'tinta', '246', 'Ly Thuong Kiet', 'District 10', 'Ho Chi Minh City'),
     ('baotram2004@gmail.com', '123', 'tramdang', '357', 'Ngo Quyen', 'Dong Da', 'Ha Noi'),
@@ -53,8 +53,11 @@ VALUES
     ('minhkhanh2004@gmail.com', 'xyz', 'khanh', '114', 'Ba Huyen Thanh Quan', 'Binh Thanh', 'Ho Chi Minh City');
 
 INSERT INTO rates (user_id, movie_id, rate_point)
-VALUES 
-    (1, 1, 8);
+VALUES
+    (1, 1, 5), (1, 2, 4), (1, 3, 5),
+    (2, 4, 3), (2, 1, 4), (2, 2, 6),
+    (3, 2, 5), 
+    (4, 3, 5), (4, 4, 4);
 
 INSERT INTO movie_distributor
 VALUES 
@@ -66,7 +69,8 @@ VALUES
 
 INSERT INTO showtime (cinema_name, "time", room, number_of_tickets, movie_id)
 VALUES 
-    ('CGV Bach Khoa', '2024-11-19 14:00:00+02:00', 12, 5000, 1);
+    ('CGV Bach Khoa', '2024-11-19 14:00:00+02:00', 12, 5000, 2);
+
 
 INSERT INTO studio_founder (studio_id, founder_name)
 VALUES
@@ -166,9 +170,8 @@ VALUES
 
 INSERT INTO cinema_streams
 VALUES
-	  ('CGV Bach Khoa', 1),
-	  ('Galaxy Back Khoa', 1),
-	  ('CGV Bach Khoa', 2);
+	  ('CGV Bach Khoa', 1);
+
 
 INSERT INTO actor_award_is_nominated
 VALUES
@@ -213,3 +216,23 @@ INSERT INTO main_trailer
 VALUES
 		('https://www.youtube.com/watch?v=J2eCrGU2OG8&list=RDJ2eCrGU2OG8&start_radio=1', 2.5, '2020-10-09', 1),
 		('https://www.youtube.com/watch?v=gVVhHjyC04k&list=RDJ2eCrGU2OG8&index=1', 2, '2020-10-09', 1);
+
+INSERT INTO review (user_id, timestamp, movie_id, comment)
+VALUES
+    (1, '2024-01-01', 1, 'Amazing movie!'),
+    (1, '2024-02-01', 2, 'Mind-blowing concepts!'),
+    (1, '2024-03-01', 3, 'Lovely and artistic.'),
+    (2, '2024-01-15', 4, 'Good, but confusing.'),
+    (2, '2024-02-20', 1, 'Enjoyable but slow.'),
+    (3, '2024-03-10', 2, 'Absolutely delightful!'),
+    (3, '2024-03-15', 3, 'A masterpiece.'),
+    (4, '2024-03-15', 4, 'Dinh noc, kich tran, bay phap phoi.');
+
+INSERT INTO user_phone_number
+VALUES
+		(1, '0123456789'),
+		(2, '0876543210'),
+		(2, '0673940534'),
+		(3, '0246898564'),
+		(3, '0847257383'),
+		(4, '0463646436');
