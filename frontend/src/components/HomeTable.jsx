@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Table, TextInput, Button, Select } from 'flowbite-react';
 import axios from 'axios';
-export default function HomeTable() {
+export default function MovieTable() {
     const [data, setData] = useState([]);
 
     // {
