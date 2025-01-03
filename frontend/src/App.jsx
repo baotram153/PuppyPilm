@@ -10,12 +10,16 @@ import About from './pages/About';
 import SeeAward from './pages/SeeAward';
 import RankPage from './pages/RankPage';
 import DefaultLayout from './layout/DefaultLayout';
+import { Login } from './components/Login';
+import { Signup } from './components/Signup';
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
                 <Route exact path="/" element={<HomePage />} />
+                <Route exact path="login" element={<Login />} />
+                <Route exact path="signup" element={<Signup />} />
                 <Route path="*" element={
                     <DefaultLayout>
                         <Routes>

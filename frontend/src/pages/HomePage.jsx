@@ -1,5 +1,5 @@
 import { ArrowLeft, ChevronRight, Play } from 'lucide-react'
-import { Button } from "../components/ui/Button"
+import { Button } from "../components/ui/button"
 import { Sidebar } from "../components/sidebar"
 import { Rating } from "../components/rating"
 import { EpisodeCard } from "../components/episode-card"
