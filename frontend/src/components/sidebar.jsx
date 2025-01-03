@@ -15,7 +15,7 @@ export function Sidebar({ className }) {
 			<nav className="flex-1 space-y-4">
 				<Link to="/movie" className="flex items-center space-x-3 text-gray-300 hover:text-white">
 					<List className="h-5 w-5" />
-					<span>Filter by Ratings</span>
+					<span>Filter Movies</span>
 				</Link>
 
 				{/* <Link to="/rank-page" className="flex items-center space-x-3 text-gray-300 hover:text-white">

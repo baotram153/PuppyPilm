@@ -6,6 +6,7 @@ import { AdminSidebar } from "../components/AdminSideBar"
 import movie1 from "../assets/img/poster-1.jpg"
 import movie2 from "../assets/img/poster-2.jpg"
 import movie3 from "../assets/img/poster-3.jpg"
+import backgroundAdmin from "../assets/img/background3.jpg"
 
 
 export function AdminHomepage() {
@@ -41,46 +42,47 @@ export function AdminHomepage() {
     return (
         <div className="flex w-full h-auto bg-black">
             <AdminSidebar />
-            <div className="flex flex-col h-full flex-1 bg-gray-900 p-8">
-                <Logo className="text-center text-3xl" />
-                <div className="mx-auto space-y-4">
-                    <p className="text-white text-2xl font-semibold"></p>
-                    {/* Welcome Card */}
-                    <Card className="py-4 px-8 bg-black bg-opacity-40 border-gray-700">
-                        <CardHeader className="space-y-1 text-left">
-                            <div className="flex items-center space-x-4">
-                                <div className="h-10 w-10 rounded-full bg-red-600 flex items-center justify-center">
-                                    <ShieldCheck className="h-6 w-6 text-white" />
+            <div className="flex flex-col h-full flex-1 bg-gray-900">
+                <div className="p-8" style={{ backgroundImage: `url('${backgroundAdmin}')` }}>
+                    <Logo className="text-center text-3xl bg-slate-900 bg-opacity-90 py-2 px-4 inline-block rounded-lg" />
+                    <div className="mx-auto space-y-4">
+                        {/* Welcome Card */}
+                        <Card className="py-4 px-8 bg-black bg-opacity-40 border-gray-700">
+                            <CardHeader className="space-y-1 text-left">
+                                <div className="flex items-center space-x-4">
+                                    <div className="h-10 w-10 rounded-full bg-red-600 border- flex items-center justify-center">
+                                        <ShieldCheck className="h-6 w-6 text-white" />
+                                    </div>
+                                    <div>
+                                        <CardTitle className="text-xl text-white">Welcome, Admin!</CardTitle>
+                                        <p className="text-gray-400 text-sm">Manage your movie collection and curate content</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <CardTitle className="text-xl text-white">Welcome, Admin!</CardTitle>
-                                    <p className="text-gray-400 text-sm">Manage your movie collection and curate content</p>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="grid grid-cols-3 gap-4">
+                                    <Card className="bg-gray-800 border-gray-700">
+                                        <CardContent>
+                                            <div className="text-2xl font-semibold text-white">{movies.length}</div>
+                                            <div className="text-sm text-gray-400">Total Movies</div>
+                                        </CardContent>
+                                    </Card>
+                                    <Card className="bg-gray-800 border-gray-700">
+                                        <CardContent>
+                                            <div className="text-2xl font-semibold text-white">4.5</div>
+                                            <div className="text-sm text-gray-400">Average Rating</div>
+                                        </CardContent>
+                                    </Card>
+                                    <Card className="bg-gray-800 border-gray-700">
+                                        <CardContent>
+                                            <div className="text-2xl font-semibold text-white">3</div>
+                                            <div className="text-sm text-gray-400">Active Studios</div>
+                                        </CardContent>
+                                    </Card>
                                 </div>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="grid grid-cols-3 gap-4">
-                                <Card className="bg-gray-800 border-gray-700">
-                                    <CardContent>
-                                        <div className="text-2xl font-semibold text-white">{movies.length}</div>
-                                        <div className="text-sm text-gray-400">Total Movies</div>
-                                    </CardContent>
-                                </Card>
-                                <Card className="bg-gray-800 border-gray-700">
-                                    <CardContent>
-                                        <div className="text-2xl font-semibold text-white">4.5</div>
-                                        <div className="text-sm text-gray-400">Average Rating</div>
-                                    </CardContent>
-                                </Card>
-                                <Card className="bg-gray-800 border-gray-700">
-                                    <CardContent>
-                                        <div className="text-2xl font-semibold text-white">3</div>
-                                        <div className="text-sm text-gray-400">Active Studios</div>
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        </CardContent>
-                    </Card>
+                            </CardContent>
+                        </Card>
+                    </div>
                 </div>
 
                 {/* Movies Grid */}

@@ -2,7 +2,7 @@ import { ArrowLeft, ChevronRight, Play } from 'lucide-react'
 import { Button } from "../components/ui/button"
 import { Sidebar } from "../components/SideBar"
 import { Rating } from "../components/Rating"
-import { EpisodeCard } from "../components/episode-card"
+import { EpisodeCard } from "../components/EpisodeCard"
 import background from "../assets/img/dark-1.jpg"
 import episode1 from "../assets/img/dark-2.jpg"
 import episode2 from "../assets/img/dark-3.jpg"
