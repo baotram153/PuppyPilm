@@ -10,29 +10,35 @@ import About from './pages/About';
 import SeeAward from './pages/SeeAward';
 import RankPage from './pages/RankPage';
 import DefaultLayout from './layout/DefaultLayout';
-import { Login } from './components/Login';
-import { Signup } from './components/Signup';
+import { Login } from './pages/Login';
+import { Signup } from './pages/Signup';
+
+import { AdminHomepage } from './pages/AdminHomepage';
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
                 <Route exact path="/" element={<HomePage />} />
+                <Route exact path="/homepage" element={<HomePage />} />
                 <Route exact path="login" element={<Login />} />
                 <Route exact path="signup" element={<Signup />} />
                 <Route path="*" element={
                     <DefaultLayout>
                         <Routes>
                             <Route exact path="movie" element={<MoviePage />} />
-                            <Route exact path="add-movies" element={<AddMovie />} />
-                            <Route exact path="filter-rate" element={<FilterRate />} />
                             <Route exact path="see-award-rate" element={<SeeAward />} />
-                            <Route exact path="rank-page" element={<RankPage />} />
                             <Route exact path="about" element={<About />} />
                         </Routes>
                     </DefaultLayout>
                 }
                 />
+
+                <Route path="admin">
+                    <Route path="homepage" element={<AdminHomepage />} />
+                    <Route path="add-movie" element={<AddMovie />} />
+                    <Route path="rank-page" element={<RankPage />} />
+                </Route>
             </Routes>
         </BrowserRouter>
     );
