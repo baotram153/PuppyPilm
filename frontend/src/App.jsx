@@ -10,6 +10,8 @@ import About from './pages/About';
 import SeeAward from './pages/SeeAward';
 import RankPage from './pages/RankPage';
 import DefaultLayout from './layout/DefaultLayout';
+
+import { RoleSelection } from './pages/RolePage';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 
@@ -21,6 +23,7 @@ function App() {
             <Routes>
                 <Route exact path="/" element={<HomePage />} />
                 <Route exact path="/homepage" element={<HomePage />} />
+                <Route exact path="/role-selection" element={<RoleSelection />} />
                 <Route exact path="login" element={<Login />} />
                 <Route exact path="signup" element={<Signup />} />
                 <Route path="*" element={
