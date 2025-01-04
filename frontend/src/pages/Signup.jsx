@@ -8,6 +8,7 @@ import { Film } from 'lucide-react'
 import backgroundSignup from "../assets/img/background2.jpg"
 
 import axios from 'axios'
+import axiosPublicInstance from '../api/axiosPublicInstance'
 
 export function Signup() {
 	const [name, setName] = useState('')
@@ -23,12 +24,21 @@ export function Signup() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		// Handle signup logic here
 		console.log('Signup attempt with:', { name, email, password })
 
 		// call api
-		axios.post('https://puppypilm.tatrungtin.id.vn/api/users/register', { name, email, password })
-
+		// axios.post('https://puppypilm.tatrungtin.id.vn/api/users/register', { name, email, password })
+		const displayedName = name;
+		axiosPublicInstance.post('users/register', { displayedName, email, password, dob, houseNumber, street, district, city })
+		.then((res) => {
+			// if success, redirect to login page
+			console.log(res.data.message)
+			window.location.href = '/login'
+		})
+		.catch((err) => {
+			console.error(err)
+			alert(err.response.data.message)
+		})
 	}
 
 	return (

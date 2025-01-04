@@ -21,12 +21,13 @@ export function AdminLogin() {
 		axios.post('https://puppypilm.tatrungtin.id.vn/api/auth/login', { email, password })
 			.then((res) => {
 				console.log(res.data.message)
-				localStorage.setItem('token', res.data.token)
+				localStorage.setItem('token', res.data.data.token)
 				// localStorage.setItem('user', JSON.stringify(res.data.user))
-				window.location.href = '/homepage'
+			window.location.href = '/admin/homepage'
 			})
 			.catch((err) => {
 				console.error(err)
+				alert(err.response.data.message)
 			})
 
 	}
