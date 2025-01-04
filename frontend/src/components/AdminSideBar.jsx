@@ -1,4 +1,4 @@
-import { LogOut, List, Settings, User, Trophy, Users } from 'lucide-react'
+import { LogOut, List, Settings, User, Trophy, UserPen } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from "../lib/utils"
 import { Logo } from "./Logo"
@@ -20,7 +20,12 @@ export function AdminSidebar({ className }) {
 					<span>Manage Users</span>
 				</Link>
 
-				<Link to="/about" className="flex items-center space-x-3 text-gray-300 hover:text-white">
+				<Link to="/admin/signup" className="flex items-center space-x-3 text-gray-300 hover:text-white">
+					<UserPen className="h-5 w-5" />
+					<span>Create Admin Account</span>
+				</Link>
+
+				<Link to="/" className="flex items-center space-x-3 text-gray-300 hover:text-white">
 					<LogOut className="h-5 w-5" />
 					<span>Log Out</span>
 				</Link>

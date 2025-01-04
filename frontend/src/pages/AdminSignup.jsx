@@ -4,12 +4,12 @@ import { Button } from "../components/ui/button"
 import { Input } from "../components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card"
 import { Label } from "../components/ui/label"
-import { Film } from 'lucide-react'
+import { Shield } from 'lucide-react'
 import backgroundSignup from "../assets/img/background2.jpg"
 
 import axios from 'axios'
 
-export function Signup() {
+export function AdminSignup() {
 	const [name, setName] = useState('')
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
@@ -36,11 +36,11 @@ export function Signup() {
 			<Card className="w-[500px] bg-black bg-opacity-75 text-white py-4 px-8">
 				<CardHeader className="space-y-1">
 					<CardTitle className="text-2xl flex items-center justify-center">
-						<Film className="mr-2" />
-						Sign Up
+						<Shield className="mr-2" />
+						Create Admin Account
 					</CardTitle>
 					<CardDescription className="text-gray-400">
-						Create an account to start curating your favorite movies
+						Create an account to start managing your movies and users
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-4 text-left">
@@ -154,7 +154,7 @@ export function Signup() {
 						</div>
 
 						<Button type="submit" className="w-full mt-4 bg-red-600 hover:bg-red-700">
-							Sign Up
+							Create Admin
 						</Button>
 					</form>
 				</CardContent>

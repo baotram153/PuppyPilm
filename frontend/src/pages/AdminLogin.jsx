@@ -9,7 +9,7 @@ import backgroundLogin from "../assets/img/background1.jpg"
 
 import axios from 'axios'
 
-export function Login() {
+export function AdminLogin() {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 
@@ -75,8 +75,8 @@ export function Login() {
 					</form>
 				</CardContent>
 				<CardFooter>
-					<p className="text-sm text-gray-400 text-center w-full">
-						Don't have an account? <Link to="/signup" className="text-red-400 hover:underline">Sign up</Link>
+					<p className="text-sm text-gray-400 text-center w-full whitespace-nowrap">
+						Or you may want to <Link to="/admin/signup" className="text-red-400 hover:underline">Create an Admin account</Link>!
 					</p>
 				</CardFooter>
 			</Card>
