@@ -6,7 +6,7 @@ import { Sidebar } from './SideBar'
 
 export function AdminSidebar({ className }) {
 	return (
-		<div className={cn("flex h-screen w-64 flex-col bg-black p-4 justify-between", className)}>
+		<div className={cn("flex h-auto w-64 flex-col bg-black p-4 justify-between", className)}>
 			<Logo className="text-left text-2xl" />
 
 			<nav className="flex-1 space-y-4">

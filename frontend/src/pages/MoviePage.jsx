@@ -1,5 +1,11 @@
-import MovieTable from '../components/HomeTable';
+import HomeTable from '../components/HomeTable';
+import { Sidebar } from '../components/SideBar';
 
 export default function MoviePage() {
-    return <MovieTable />;
+    return (
+        <div className='flex'>
+            <Sidebar />
+            <HomeTable className="flex-1"/>
+        </div>
+    )  
 }

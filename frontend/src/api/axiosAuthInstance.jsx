@@ -6,7 +6,7 @@ const axiosAuthInstance = axios.create({
 })
 
 // add authentication token to the header of every request
-axiosInstance.interceptors.request.use(
+axiosAuthInstance.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token')
         if (token) {

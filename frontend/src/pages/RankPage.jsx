@@ -1,10 +1,11 @@
-import NavBar from '../layout/NavBar';
+import { AdminSidebar }  from '../components/AdminSideBar';
 import RankingTable from '../components/RankingTable';
 
 export default function RankPage() {
     return (
-        <>
-            <RankingTable/>
-        </>
+        <div className='flex'>
+            <AdminSidebar/>
+            <RankingTable className="flex-1"/>
+        </div>
     );
 }

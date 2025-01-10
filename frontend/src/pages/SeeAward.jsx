@@ -1,10 +1,13 @@
-import NavBar from '../layout/NavBar';
+import { Sidebar } from '../components/SideBar';
 import RatingTable from '../components/RatingTable';
 
 export default function SeeAward() {
     return (
-        <>
-            <RatingTable/>
-        </>
+        <div className='flex'>
+            <Sidebar />
+            <div className='flex-1'>
+                <RatingTable/>
+            </div>
+        </div>
     );
 }

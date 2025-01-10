@@ -1,7 +1,19 @@
 import { useState, useEffect } from "react";
-import { Checkbox, Table, Button} from "flowbite-react";
-import { Label, Modal, TextInput } from "flowbite-react";
-import { TbSortAscending,  TbSortDescending, TbSortDescendingLetters, TbSortAscendingLetters } from "react-icons/tb";
+
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "../components/ui/table";
+
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+
+import { TbSortAscending, TbSortDescending, TbSortDescendingLetters, TbSortAscendingLetters } from "react-icons/tb";
+
 import EditForm from "./EditForm";
 
 export default function RatingTable() {
@@ -12,27 +24,27 @@ export default function RatingTable() {
 
     useEffect(() => {
         fetch(`https://puppypilm.tatrungtin.id.vn/api/movies/awards`) // Replace with your API URL
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((jsonData) => {
-            if (jsonData.success && Array.isArray(jsonData.data )) {
-                console.log("Fetched Data:", jsonData);
-                setData(jsonData.data); // Update data if the response is successful
-                setfilteredData(jsonData.data);
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((jsonData) => {
+                if (jsonData.success && Array.isArray(jsonData.data)) {
+                    console.log("Fetched Data:", jsonData);
+                    setData(jsonData.data); // Update data if the response is successful
+                    setfilteredData(jsonData.data);
+                    setLoading(false);
+                } else {
+                    throw new Error(jsonData.message || "API Error");
+                }
+            })
+            .catch((error) => {
+                setError(error.message);
                 setLoading(false);
-              } else {
-                throw new Error(jsonData.message || "API Error");
-              }
-          })
-          .catch((error) => {
-            setError(error.message);
-            setLoading(false);
-          });
-      }, []);
+            });
+    }, []);
 
     /* if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>; */
@@ -52,66 +64,66 @@ export default function RatingTable() {
         ]
     );
 
-    const handleSearch= () => {
+    const handleSearch = () => {
         const filteredResult = data.filter((row) => {
             const checkTitle = row.title.toLowerCase()
-            .includes(searchTitle.toLowerCase()) || searchTitle === '';
-            
+                .includes(searchTitle.toLowerCase()) || searchTitle === '';
+
             const checkNoN = row.number_of_nominations > Number(searchNoN) || searchNoN === '';
 
             const checkNoA = row.number_of_awards > Number(searchNoA) || searchNoA === '';
 
             const checkRate = row.winning_ratio > Number(searchRate) || searchRate === '';
-            
+
             return checkTitle && checkNoN && checkNoA && checkRate;
         });
         setfilteredData(filteredResult);
     };
-    
+
     const handleSort = (key) => {
         var toggledDirect = true;
         setSortConfig(
             sortConfig.map((item) => {
-                    if(item.key === key) {
-                        toggledDirect = !item.isAscending;
-                        return {...item, isAscending: toggledDirect}
-                    } else {
-                        return item;
-                    }
+                if (item.key === key) {
+                    toggledDirect = !item.isAscending;
+                    return { ...item, isAscending: toggledDirect }
+                } else {
+                    return item;
                 }
+            }
             )
         );
         const sortedData = [...filteredData].sort((a, b) => {
-            if(toggledDirect) {
-                if(key === "title") {
+            if (toggledDirect) {
+                if (key === "title") {
                     return a[key].localeCompare(b[key]);
                 } else {
                     return a[key] - b[key];
-                } 
+                }
             } else {
-                if(key === "title") {
+                if (key === "title") {
                     return b[key].localeCompare(a[key]);
                 } else {
                     return b[key] - a[key];
-                } 
+                }
             }
         });
-        
+
 
         setfilteredData(sortedData);
     };
 
     const getSortIndicator = (key) => {
         const item = sortConfig.find((item) => item.key === key);
-        if(item.key === key) {
-            if(item.isAscending) {
-                if(key === "title") {
+        if (item.key === key) {
+            if (item.isAscending) {
+                if (key === "title") {
                     return <TbSortAscendingLetters />;
                 } else {
                     return <TbSortAscending />;
                 }
             } else {
-                if(key === "title") {
+                if (key === "title") {
                     return <TbSortDescendingLetters />;
                 } else {
                     return <TbSortDescending />;
@@ -121,108 +133,110 @@ export default function RatingTable() {
         return null;
     };
     return (
-        <div>
-            <form>
-                <div className="grid gap-6 mb-6 md:grid-cols-2">
+        <div className="min-h-screen bg-black text-white p-6">
+            <h2 className="text-2xl font-bold mb-6 text-red-600">Filter by Rating</h2>
+                <div className="grid gap-6 mb-6 md:grid-cols-2 text-left">
                     <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">
+                        <label className="text-sm text-gray-400">
                             Title
                         </label>
-                        <TextInput
+                        <Input
                             type="text"
                             value={searchTitle}
                             onChange={(e) => setSearchTitle(e.target.value)}
-                            className="mb-2"
+                            className="bg-zinc-800 border-zinc-700 text-white"
                             placeholder="Search by Title"
                         />
                     </div>
                     <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">
+                        <label className="text-sm text-gray-400">
                             Number of Nominations
                         </label>
-                        <TextInput
+                        <Input
                             type="number"
                             value={searchNoN}
                             onChange={(e) => setSearchNoN(e.target.value)}
-                            className="mb-2"
+                            className="bg-zinc-800 border-zinc-700 text-white"
                             placeholder="Greater Than..."
                         />
                     </div>
                     <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">
+                        <label className="text-sm text-gray-400">
                             Number of Awards
                         </label>
-                        <TextInput
+                        <Input
                             type="number"
                             value={searchNoA}
                             onChange={(e) => setSearchNoA(e.target.value)}
-                            className="mb-2"
+                            className="bg-zinc-800 border-zinc-700 text-white"
                             placeholder="Greater Than..."
                         />
                     </div>
                     <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white text-left">
+                        <label className="text-sm text-gray-400">
                             Winning Rate (%)
                         </label>
-                        <TextInput
+                        <Input
                             type="number"
                             value={searchRate}
                             onChange={(e) => setSearchRate(e.target.value)}
-                            className="mb-2"
+                            className="bg-zinc-800 border-zinc-700 text-white"
                             placeholder="Greater Than..."
                         />
                     </div>
                     <div className="flex justify-start">
-                        <Button onClick={handleSearch}>Filter</Button>
+                        <Button onClick={handleSearch} className="mt-6 bg-red-600 hover:bg-red-700 text-white hover:scale-105">Filter</Button>
                     </div>
                 </div>
-            </form>
-            <div className="overflow-x-auto">
+            <div className="bg-zinc-900 rounded-lg shadow-lg overflow-hidden">
                 <Table hoverable>
-                    <Table.Head>
-                        <Table.HeadCell 
-                        onClick={() => handleSort("movie_id")}>
-                            Movie ID 
-                            {getSortIndicator("movie_id")}
-                        </Table.HeadCell>
-                        <Table.HeadCell
-                        onClick={() => handleSort("title")}>
-                            Title
-                            {getSortIndicator("title")}
-                        </Table.HeadCell>
-                        <Table.HeadCell 
-                        onClick={() => handleSort("number_of_nominations")}>
-                            Number of nominations
-                            {getSortIndicator("number_of_nominations")}
-                        </Table.HeadCell>
-                        <Table.HeadCell 
-                        onClick={() => handleSort("number_of_awards")}>
-                            Number of awards
-                            {getSortIndicator("number_of_awards")}
-                        </Table.HeadCell>
-                        <Table.HeadCell 
-                        onClick={() => handleSort("winning_ratio")}>
-                            Winning Ratio (%)
-                            {getSortIndicator("winning_ratio")}
-                        </Table.HeadCell>
-                    </Table.Head>
+                    <TableHeader>
+                        <TableRow className="border-zinc-700 bg-zinc-800">
+                            <TableHead className="text-gray-400"
+                                onClick={() => handleSort("movie_id")}>
+                                Movie ID
+                                {getSortIndicator("movie_id")}
+                            </TableHead>
+                            <TableHead className="text-gray-400"
+                                onClick={() => handleSort("title")}>
+                                Title
+                                {getSortIndicator("title")}
+                            </TableHead>
+                            <TableHead className="text-gray-400"
+                                onClick={() => handleSort("number_of_nominations")}>
+                                Number of nominations
+                                {getSortIndicator("number_of_nominations")}
+                            </TableHead>
+                            <TableHead className="text-gray-400"
+                                onClick={() => handleSort("number_of_awards")}>
+                                Number of awards
+                                {getSortIndicator("number_of_awards")}
+                            </TableHead>
+                            <TableHead className="text-gray-400"
+                                onClick={() => handleSort("winning_ratio")}>
+                                Winning Ratio (%)
+                                {getSortIndicator("winning_ratio")}
+                            </TableHead>
+                        </TableRow>
+
+                    </TableHeader>
                     <div>
                         {loading && <p>Loading...</p>}
                         {error && <p>Error: {error}</p>}
                     </div>
-                    <Table.Body className="divide-y">
+                    <TableBody className="divide-y">
                         {filteredData.map((row) => (
-                            <Table.Row key={row.movie_id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                            <TableRow key={row.movie_id} className="border-zinc-700">
+                                <TableCell className="text-white py-4">
                                     {row.movie_id}
-                                </Table.Cell>
-                                <Table.Cell>{row.title}</Table.Cell>
-                                <Table.Cell>{row.number_of_nominations}</Table.Cell>
-                                <Table.Cell>{row.number_of_awards}</Table.Cell>
-                                <Table.Cell>{row.winning_ratio}</Table.Cell>
-                            </Table.Row>
+                                </TableCell>
+                                <TableCell className="text-white py-4">{row.title}</TableCell>
+                                <TableCell className="text-white py-4">{row.number_of_nominations}</TableCell>
+                                <TableCell className="text-white py-4">{row.number_of_awards}</TableCell>
+                                <TableCell className="text-white py-4">{row.winning_ratio}</TableCell>
+                            </TableRow>
                         ))}
-                    </Table.Body>
+                    </TableBody>
                 </Table>
             </div>
         </div>

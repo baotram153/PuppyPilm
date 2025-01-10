@@ -8,6 +8,7 @@ import { Film } from 'lucide-react'
 import backgroundLogin from "../assets/img/background1.jpg"
 
 import axios from 'axios'
+import axiosPublicInstance from '../api/axiosPublicInstance'
 
 export function Login() {
 	const [email, setEmail] = useState('')
@@ -18,10 +19,10 @@ export function Login() {
 		console.log('Login attempt with:', { email, password })
 
 		// call api
-		axios.post('https://puppypilm.tatrungtin.id.vn/api/auth/login', { email, password })
+		axiosPublicInstance.post('https://puppypilm.tatrungtin.id.vn/api/auth/login', { email, password })
 			.then((res) => {
 				console.log(res.data.message)
-				localStorage.setItem('token', res.data.token)
+				localStorage.setItem('token', res.data.data.token)
 				// localStorage.setItem('user', JSON.stringify(res.data.user))
 				window.location.href = '/homepage'
 			})

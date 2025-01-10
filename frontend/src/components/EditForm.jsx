@@ -5,6 +5,7 @@ import { Label, Modal, TextInput } from "flowbite-react";
 import { Select } from "flowbite-react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import axiosAuthInstance from "../api/axiosAuthInstance";
 
 
 export default function EditForm({ openModal, setOpenModal, movieInfo, setAlert, setAlertMessage, setSuccess, setFetchData}) {
@@ -22,7 +23,7 @@ export default function EditForm({ openModal, setOpenModal, movieInfo, setAlert,
         console.log(data);
         // e.preventDefault();
 
-        axios.patch(`https://puppypilm.tatrungtin.id.vn/api/movies/${movieInfo.movie_id}`, data, {
+        axiosAuthInstance.patch(`https://puppypilm.tatrungtin.id.vn/api/movies/${movieInfo.movie_id}`, data, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -33,6 +34,7 @@ export default function EditForm({ openModal, setOpenModal, movieInfo, setAlert,
                 setAlertMessage(response.data.message);
                 setSuccess(response.data.success);
                 setFetchData(true);
+                window.location.reload();
             })
             .catch((error) => {
                 console.error("Update movie error:", error);

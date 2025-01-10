@@ -1,12 +1,13 @@
-import NavBar from '../layout/NavBar';
 import MovieTable from '../components/MovieTable';
 import EditForm from '../components/EditForm';
 import { useEffect } from 'react';
+import { AdminSidebar } from '../components/AdminSideBar';
 
 export default function AddMovie() {
     return (
-        <>
-            <MovieTable />,
-        </>
+        <div className='flex'>
+            <AdminSidebar />
+            <MovieTable />
+        </div>
     );
 }

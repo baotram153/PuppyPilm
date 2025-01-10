@@ -4,6 +4,7 @@ import { Label, Modal, TextInput, Button } from "flowbite-react";
 import { Select } from "flowbite-react";
 import { set, useForm } from "react-hook-form";
 import axios from 'axios';
+import axiosAuthInstance from "../api/axiosAuthInstance";
 
 
 export default function AddForm({ openModal, setOpenModal, setAlert, setAlertMessage, setSuccess, setFetchData }) {
@@ -19,7 +20,7 @@ export default function AddForm({ openModal, setOpenModal, setAlert, setAlertMes
         console.log(data);
         
         // e.preventDefault();
-        axios.post(`https://puppypilm.tatrungtin.id.vn/api/movies`, data, {
+        axiosAuthInstance.post(`https://puppypilm.tatrungtin.id.vn/api/movies`, data, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -30,6 +31,7 @@ export default function AddForm({ openModal, setOpenModal, setAlert, setAlertMes
                 setAlertMessage(response.data.message);
                 setSuccess(response.data.success);
                 setFetchData(true);
+                window.location.reload();
             })
             .catch((error) => {
                 console.error("Add movie error:", error);

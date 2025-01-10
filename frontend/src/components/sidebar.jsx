@@ -1,11 +1,11 @@
-import { Home, TrendingUp, Bookmark, List, Settings, User, Trophy, Award, Users } from 'lucide-react'
+import { Home, TrendingUp, Bookmark, List, Settings, User, Trophy, Award, Users, LogOut } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from "../lib/utils"
 import { Logo } from "./Logo"
 
 export function Sidebar({ className }) {
 	return (
-		<div className={cn("flex h-screen w-64 flex-col bg-black p-4", className)}>
+		<div className={cn("flex h-auto w-64 flex-col bg-black p-4", className)}>
 			{/* <div className="mb-8">
         <h1 className="text-2xl text-left font-bold text-red-600">PuppyPilm</h1>
       </div> */}
@@ -34,6 +34,10 @@ export function Sidebar({ className }) {
 				<Link to="/about" className="flex items-center space-x-3 text-gray-300 hover:text-white">
 					<Users className="h-5 w-5" />
 					<span>About us</span>
+				</Link>
+				<Link to="/" className="flex items-center space-x-3 text-gray-300 hover:text-white">
+					<LogOut className="h-5 w-5" />
+					<span>Log Out</span>
 				</Link>
 			</nav>
 

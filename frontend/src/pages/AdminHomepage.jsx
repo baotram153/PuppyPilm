@@ -40,7 +40,7 @@ export function AdminHomepage() {
     ]
 
     return (
-        <div className="flex w-full h-auto bg-black">
+        <div className="flex h-auto bg-black">
             <AdminSidebar />
             <div className="flex flex-col h-full flex-1 bg-gray-900">
                 <div className="p-8" style={{ backgroundImage: `url('${backgroundAdmin}')` }}>
